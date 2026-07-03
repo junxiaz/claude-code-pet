@@ -176,7 +176,19 @@ local function render(list)
     end
   end
 
-  local anchor = hs.settings.get("ccPetAnchor") or { x = sf.x + sf.w - 24, y = sf.y + sf.h - 24 }
+  -- 多屏/分辨率兜底：锚点不在任何屏幕内(换屏、分辨率变化、拔外接屏)就回落到当前主屏右下角
+  local pf = hs.screen.primaryScreen():frame()
+  local anchor = hs.settings.get("ccPetAnchor")
+  local onScreen = false
+  if anchor then
+    for _, sc in ipairs(hs.screen.allScreens()) do
+      local f = sc:frame()
+      if anchor.x >= f.x and anchor.x <= f.x + f.w and anchor.y >= f.y and anchor.y <= f.y + f.h then
+        onScreen = true; break
+      end
+    end
+  end
+  if not onScreen then anchor = { x = pf.x + pf.w - 24, y = pf.y + pf.h - 24 } end
   local rect = hs.geometry.rect(anchor.x - w, anchor.y - h, w, h)
 
   -- 先销毁旧挂件再建新的，否则旧 canvas 要等 GC 才消失 → 屏幕上短暂出现两个
