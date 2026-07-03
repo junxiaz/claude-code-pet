@@ -1,9 +1,15 @@
 # Claude Code 悬浮 Pet 🐾
 
-给 [Claude Code](https://claude.com/claude-code) 做的 macOS 桌面悬浮状态挂件,灵感来自 OpenAI Codex 的 "Pets"。
-在屏幕角落实时显示每个 Claude Code 会话的状态,点一下就跳到对应终端。
+**中文** · [English](README.en.md)
 
-![states](docs/demo.gif) <!-- 可选:自己录个演示 gif 放这里 -->
+![platform](https://img.shields.io/badge/platform-macOS-black)
+![license](https://img.shields.io/badge/license-MIT-green)
+![Claude Code](https://img.shields.io/badge/Claude%20Code-hooks-8A5CF6)
+![Hammerspoon](https://img.shields.io/badge/Hammerspoon-Lua-blue)
+
+给 [Claude Code](https://claude.com/claude-code) 做的 macOS 桌面悬浮状态挂件,灵感来自 OpenAI Codex 的 "Pets" —— 在屏幕角落实时显示每个会话的状态,点一下就跳到对应终端。
+
+![states](docs/demo.gif)
 
 ## 功能
 
@@ -31,7 +37,7 @@
 ## 安装
 
 ```bash
-git clone <this-repo> claude-code-pet
+git clone https://github.com/junxiaz/claude-code-pet.git
 cd claude-code-pet
 bash install.sh
 ```
