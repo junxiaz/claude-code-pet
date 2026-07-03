@@ -34,6 +34,11 @@ local HOOKS = HOME .. "/.claude/hooks"
 local HELPER = HOOKS .. "/cc-sessions.js"
 local FOCUS = HOOKS .. "/focus-tty.applescript"
 local OPEN = HOOKS .. "/open-agents.applescript"
+local SENDKEY = HOOKS .. "/send-key.applescript"
+-- 盲批开关(默认关):开启后,点 needs⏰ 行直接给该会话发送批准键,不切窗口。
+-- ⚠️ 盲操作,你没看到在批准什么;approveKeys 默认 "1"(允许本次)。
+local BLIND = cfg.blindApprove == true
+local APPROVE_KEYS = cfg.approveKeys or "1"
 _G.ccPaths = "node=" .. NODE .. " | claude=" .. CLAUDE
 
 -- ---- 配置 ----
@@ -77,10 +82,21 @@ local function focusTtyAsync(tty, onFail)
   end)
 end
 
+local function approveTtyAsync(tty, name)
+  if not tty or tty == "" or tty == "??" then return end
+  runTask("/usr/bin/osascript", { SENDKEY, "/dev/" .. tty, APPROVE_KEYS }, function(_, out)
+    if (out or ""):find("ok") then hs.alert.show("🔓 已盲批 " .. (name or "")) end
+  end)
+end
+
 local function onClick(id)
   local s = chipMap[id]
   if s and s.tty and s.tty ~= "" and s.tty ~= "??" then
-    focusTtyAsync(s.tty, openAgentsAsync)
+    if BLIND and s.state == "needs" then
+      approveTtyAsync(s.tty, s.name) -- 盲批:直接发批准键,不切窗口
+    else
+      focusTtyAsync(s.tty, openAgentsAsync)
+    end
   else
     openAgentsAsync()
   end

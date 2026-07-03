@@ -12,7 +12,7 @@ warn() { printf '\033[1;33m⚠ %s\033[0m\n' "$1"; }
 die()  { printf '\033[1;31m✗ %s\033[0m\n' "$1"; exit 1; }
 
 say "检查依赖…"
-[ "$(uname)" = "Darwin" ] || die "仅支持 macOS"
+[ "$(uname)" = "Darwin" ] || die "此脚本仅用于 macOS;Windows 请运行 install.ps1"
 command -v node >/dev/null 2>&1 || die "未找到 node，请先安装 Node.js（brew install node）"
 [ -d "/Applications/Hammerspoon.app" ] || warn "未检测到 Hammerspoon.app，请从 https://www.hammerspoon.org 安装"
 if command -v claude >/dev/null 2>&1 || [ -x "$HOME/.npm-global/bin/claude" ] || [ -x "$HOME/.claude/local/claude" ]; then
